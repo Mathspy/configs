@@ -1,0 +1,17 @@
+format="""
+$all\
+$fill\
+$time\
+$line_break\
+$jobs\
+$battery\
+$status\
+$shell\
+$character\
+"""
+
+[time]
+disabled = false
+
+[fill]
+symbol = " "
