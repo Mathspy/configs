@@ -1,3 +1,7 @@
 path = ["/Users/mathspy/.cargo/bin", "/Users/mathspy/.volta/bin", "/usr/local/bin"]
 prompt = "starship prompt"
 startup = ["alias unwrap = open", "alias open = ^open", "source ~/.cache/starship/init.nu"]
+
+[line_editor]
+completion_match_method = "case-insensitive"
+max_history_size = 50000
