@@ -1,3 +1,5 @@
+theme = "rose_pine"
+
 [keys.normal]
 "ß" = "split_selection_on_newline"
 
