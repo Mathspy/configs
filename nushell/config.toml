@@ -1,6 +1,11 @@
 path = ["/Users/mathspy/.cargo/bin", "/Users/mathspy/.volta/bin", "/usr/local/bin"]
-prompt = "starship prompt"
-startup = ["alias unwrap = open", "alias open = ^open", "source ~/.cache/starship/init.nu"]
+prompt = "starship_prompt"
+startup = [
+  "alias unwrap = open",
+  "alias open = ^open",
+  "starship init nu | save ~/.cache/starship/init.nu",
+  "source ~/.cache/starship/init.nu"
+]
 
 [line_editor]
 completion_match_method = "case-insensitive"
