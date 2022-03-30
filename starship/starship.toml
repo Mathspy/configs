@@ -1,7 +1,5 @@
 format="""
 $all\
-$fill\
-$time\
 $line_break\
 $jobs\
 $battery\
@@ -9,6 +7,8 @@ $status\
 $shell\
 $character\
 """
+
+right_format="""$time"""
 
 [time]
 disabled = false
