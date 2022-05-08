@@ -1,59 +1,5 @@
 # Nushell Config File
 
-# def create_left_prompt [] {
-#     let path_segment = ($env.PWD)
-# 
-#     $path_segment
-# }
-
-# def create_right_prompt [] {
-#     let time_segment = ([
-#         (date now | date format '%m/%d/%Y %r')
-#     ] | str collect)
-# 
-#     $time_segment
-# }
-
-# Use nushell functions to define your right and left prompt
-let-env PROMPT_COMMAND = { create_left_prompt }
-let-env PROMPT_COMMAND_RIGHT = { create_right_prompt }
-
-# The prompt indicators are environmental variables that represent
-# the state of the prompt
-let-env PROMPT_INDICATOR = "〉"
-let-env PROMPT_INDICATOR_VI_INSERT = ": "
-let-env PROMPT_INDICATOR_VI_NORMAL = "〉"
-let-env PROMPT_MULTILINE_INDICATOR = "::: "
-
-# Specifies how environment variables are:
-# - converted from a string to a value on Nushell startup (from_string)
-# - converted from a value back to a string when running external commands (to_string)
-# Note: The conversions happen *after* config.nu is loaded
-let-env ENV_CONVERSIONS = {
-  "PATH": {
-    from_string: { |s| $s | split row (char esep) }
-    to_string: { |v| $v | str collect (char esep) }
-  }
-  "Path": {
-    from_string: { |s| $s | split row (char esep) }
-    to_string: { |v| $v | str collect (char esep) }
-  }
-}
-
-# Directories to search for scripts when calling source or use
-#
-# By default, <nushell-config-dir>/scripts is added
-let-env NU_LIB_DIRS = [
-    ($nu.config-path | path dirname | path join 'scripts')
-]
-
-# Directories to search for plugin binaries when calling register
-#
-# By default, <nushell-config-dir>/plugins is added
-let-env NU_PLUGIN_DIRS = [
-    ($nu.config-path | path dirname | path join 'plugins')
-]
-
 module completions {
   # Custom completions for external commands (those outside of Nushell)
   # Each completions has two parts: the form of the external command, including its flags and parameters
@@ -61,66 +7,116 @@ module completions {
   #
   # This is a simplified version of completions for git branches and git remotes
   def "nu-complete git branches" [] {
-    ^git branch | lines | each { |line| $line | str find-replace '\* ' '' | str trim }
+    ^git branch | lines | each { |line| $line | str replace '[\*\+] ' '' | str trim }
   }
 
   def "nu-complete git remotes" [] {
     ^git remote | lines | each { |line| $line | str trim }
   }
 
-  export extern "git checkout" [
-    branch?: string@"nu-complete git branches" # name of the branch to checkout
-    -b: string                                 # create and checkout a new branch
-    -B: string                                 # create/reset and checkout a branch
-    -l                                         # create reflog for new branch
-    --guess                                    # second guess 'git checkout <no-such-branch>' (default)
-    --overlay                                  # use overlay mode (default)
-    --quiet(-q)                                # suppress progress reporting
-    --recurse-submodules: string               # control recursive updating of submodules
-    --progress                                 # force progress reporting
-    --merge(-m)                                # perform a 3-way merge with the new branch
-    --conflict: string                         # conflict style (merge or diff3)
-    --detach(-d)                               # detach HEAD at named commit
-    --track(-t)                                # set upstream info for new branch
-    --force(-f)                                # force checkout (throw away local modifications)
-    --orphan: string                           # new unparented branch
-    --overwrite-ignore                         # update ignored files (default)
-    --ignore-other-worktrees                   # do not check if another worktree is holding the given ref
-    --ours(-2)                                 # checkout our version for unmerged files
-    --theirs(-3)                               # checkout their version for unmerged files
-    --patch(-p)                                # select hunks interactively
-    --ignore-skip-worktree-bits                # do not limit pathspecs to sparse entries only
-    --pathspec-from-file: string               # read pathspec from file
+  # Download objects and refs from another repository
+  export extern "git fetch" [
+    repository?: string@"nu-complete git remotes" # name of the branch to fetch
+    --all                                         # Fetch all remotes
+    --append(-a)                                  # Append ref names and object names to .git/FETCH_HEAD
+    --atomic                                      # Use an atomic transaction to update local refs.
+    --depth: int                                  # Limit fetching to n commits from the tip
+    --deepen: int                                 # Limit fetching to n commits from the current shallow boundary
+    --shallow-since: string                       # Deepen or shorten the history by date
+    --shallow-exclude: string                     # Deepen or shorten the history by branch/tag
+    --unshallow                                   # Fetch all available history
+    --update-shallow                              # Update .git/shallow to accept new refs
+    --negotiation-tip: string                     # Specify which commit/glob to report while fetching
+    --negotiate-only                              # Do not fetch, only print common ancestors
+    --dry-run                                     # Show what would be done
+    --write-fetch-head                            # Write fetched refs in FETCH_HEAD (default)
+    --no-write-fetch-head                         # Do not write FETCH_HEAD
+    --force(-f)                                   # Always update the local branch
+    --keep(-k)                                    # Keep dowloaded pack
+    --multiple                                    # Allow several arguments to be specified
+    --auto-maintenance                            # Run 'git maintenance run --auto' at the end (default)
+    --no-auto-maintenance                         # Don't run 'git maintenance' at the end
+    --auto-gc                                     # Run 'git maintenance run --auto' at the end (default)
+    --no-auto-gc                                  # Don't run 'git maintenance' at the end
+    --write-commit-graph                          # Write a commit-graph after fetching
+    --no-write-commit-graph                       # Don't write a commit-graph after fetching
+    --prefetch                                    # Place all refs into the refs/prefetch/ namespace
+    --prune(-p)                                   # Remove obsolete remote-tracking references
+    --prune-tags(-P)                              # Remove any local tags that do not exist on the remote
+    --no-tags(-n)                                 # Disable automatic tag following
+    --refmap: string                              # Use this refspec to map the refs to remote-tracking branches
+    --tags(-t)                                    # Fetch all tags
+    --recurse-submodules: string                  # Fetch new commits of populated submodules (yes/on-demand/no)
+    --jobs(-j): int                               # Number of parallel children
+    --no-recurse-submodules                       # Disable recursive fetching of submodules
+    --set-upstream                                # Add upstream (tracking) reference
+    --submodule-prefix: string                    # Prepend to paths printed in informative messages
+    --upload-pack: string                         # Non-default path for remote command
+    --quiet(-q)                                   # Silence internally used git commands
+    --verbose(-v)                                 # Be verbose
+    --progress                                    # Report progress on stderr
+    --server-option(-o): string                   # Pass options for the server to handle
+    --show-forced-updates                         # Check if a branch is force-updated
+    --no-show-forced-updates                      # Don't check if a branch is force-updated
+    -4                                            # Use IPv4 addresses, ignore IPv6 addresses
+    -6                                            # Use IPv6 addresses, ignore IPv4 addresses
   ]
 
+  # Check out git branches and files
+  export extern "git checkout" [
+    ...targets: string@"nu-complete git branches"   # name of the branch or files to checkout
+    --conflict: string                              # conflict style (merge or diff3)
+    --detach(-d)                                    # detach HEAD at named commit
+    --force(-f)                                     # force checkout (throw away local modifications)
+    --guess                                         # second guess 'git checkout <no-such-branch>' (default)
+    --ignore-other-worktrees                        # do not check if another worktree is holding the given ref
+    --ignore-skip-worktree-bits                     # do not limit pathspecs to sparse entries only
+    --merge(-m)                                     # perform a 3-way merge with the new branch
+    --orphan: string                                # new unparented branch
+    --ours(-2)                                      # checkout our version for unmerged files
+    --overlay                                       # use overlay mode (default)
+    --overwrite-ignore                              # update ignored files (default)
+    --patch(-p)                                     # select hunks interactively
+    --pathspec-from-file: string                    # read pathspec from file
+    --progress                                      # force progress reporting
+    --quiet(-q)                                     # suppress progress reporting
+    --recurse-submodules: string                    # control recursive updating of submodules
+    --theirs(-3)                                    # checkout their version for unmerged files
+    --track(-t)                                     # set upstream info for new branch
+    -b: string                                      # create and checkout a new branch
+    -B: string                                      # create/reset and checkout a branch
+    -l                                              # create reflog for new branch
+  ]
+
+  # Push changes
   export extern "git push" [
-    remote?: string@"nu-complete git remotes", # the name of the remote
-    refspec?: string@"nu-complete git branches"# the branch / refspec
-    --verbose(-v)                              # be more verbose
-    --quiet(-q)                                # be more quiet
-    --repo: string                             # repository
-    --all                                      # push all refs
-    --mirror                                   # mirror all refs
-    --delete(-d)                               # delete refs
-    --tags                                     # push tags (can't be used with --all or --mirror)
-    --dry-run(-n)                              # dry run
-    --porcelain                                # machine-readable output
-    --force(-f)                                # force updates
-    --force-with-lease: string                 # require old value of ref to be at this value
-    --recurse-submodules: string               # control recursive pushing of submodules
-    --thin                                     # use thin pack
-    --receive-pack: string                     # receive pack program
-    --exec: string                             # receive pack program
-    --set-upstream(-u)                         # set upstream for git pull/status
-    --progress                                 # force progress reporting
-    --prune                                    # prune locally removed refs
-    --no-verify                                # bypass pre-push hook
-    --follow-tags                              # push missing but relevant tags
-    --signed: string                           # GPG sign the push
-    --atomic                                   # request atomic transaction on remote side
-    --push-option(-o): string                  # option to transmit
-    --ipv4(-4)                                 # use IPv4 addresses only
-    --ipv6(-6)                                 # use IPv6 addresses only
+    remote?: string@"nu-complete git remotes",      # the name of the remote
+    ...refs: string@"nu-complete git branches"      # the branch / refspec
+    --all                                           # push all refs
+    --atomic                                        # request atomic transaction on remote side
+    --delete(-d)                                    # delete refs
+    --dry-run(-n)                                   # dry run
+    --exec: string                                  # receive pack program
+    --follow-tags                                   # push missing but relevant tags
+    --force-with-lease: string                      # require old value of ref to be at this value
+    --force(-f)                                     # force updates
+    --ipv4(-4)                                      # use IPv4 addresses only
+    --ipv6(-6)                                      # use IPv6 addresses only
+    --mirror                                        # mirror all refs
+    --no-verify                                     # bypass pre-push hook
+    --porcelain                                     # machine-readable output
+    --progress                                      # force progress reporting
+    --prune                                         # prune locally removed refs
+    --push-option(-o): string                       # option to transmit
+    --quiet(-q)                                     # be more quiet
+    --receive-pack: string                          # receive pack program
+    --recurse-submodules: string                    # control recursive pushing of submodules
+    --repo: string                                  # repository
+    --set-upstream(-u)                              # set upstream for git pull/status
+    --signed: string                                # GPG sign the push
+    --tags                                          # push tags (can't be used with --all or --mirror)
+    --thin                                          # use thin pack
+    --verbose(-v)                                   # be more verbose
   ]
 }
 
@@ -128,11 +124,11 @@ module completions {
 use completions *
 
 # for more information on themes see
-# https://github.com/nushell/nushell/blob/main/docs/How_To_Coloring_and_Theming.md
+# https://www.nushell.sh/book/coloring_and_theming.html
 let default_theme = {
     # color for nushell primitives
     separator: white
-    leading_trailing_space_bg: { attr: n } # no fg, no bg, attr non effectively turns this off
+    leading_trailing_space_bg: { attr: n } # no fg, no bg, attr none effectively turns this off
     header: green_bold
     empty: blue
     bool: white
@@ -181,7 +177,7 @@ let default_theme = {
 }
 
 # The default config record. This is where much of your global configuration is setup.
-let $config = {
+let-env config = {
   filesize_metric: false
   table_mode: rounded # basic, compact, compact_double, light, thin, with_love, rounded, reinforced, heavy, none, other
   use_ls_colors: true
@@ -191,27 +187,137 @@ let $config = {
   footer_mode: "25" # always, never, number_of_rows, auto
   quick_completions: true  # set this to false to prevent auto-selecting completions when only one remains
   partial_completions: true  # set this to false to prevent partial filling of the prompt
+  completion_algorithm: "prefix"  # prefix, fuzzy
   animate_prompt: false # redraw the prompt every second
   float_precision: 2
+  buffer_editor: "emacs" # command that will be used to edit the current line buffer with ctr+e
   use_ansi_coloring: true
   filesize_format: "auto" # b, kb, kib, mb, mib, gb, gib, tb, tib, pb, pib, eb, eib, zb, zib, auto
   edit_mode: emacs # emacs, vi
-  max_history_size: 10000
-  menu_config: {
-    columns: 4
-    col_width: 20   # Optional value. If missing all the screen width is used to calculate column width
-    col_padding: 2
-    text_style: green
-    selected_text_style: green_reverse
-    marker: "| "
-  }
-  history_config: {
-    page_size: 10
-    selector: "!"
-    text_style: green
-    selected_text_style: green_reverse
-    marker: "? "
-  }
+  max_history_size: 10000 # Session has to be reloaded for this to take effect
+  sync_history_on_enter: true # Enable to share the history between multiple sessions, else you have to close the session to persist history to file
+  shell_integration: true # enables terminal markers and a workaround to arrow keys stop working issue
+  disable_table_indexes: false # set to true to remove the index column from tables
+  cd_with_abbreviations: false # set to true to allow you to do things like cd s/o/f and nushell expand it to cd some/other/folder
+  menus: [
+      # Configuration for default nushell menus
+      # Note the lack of souce parameter
+      {
+        name: completion_menu
+        only_buffer_difference: false
+        marker: "| "
+        type: {
+            layout: columnar
+            columns: 4
+            col_width: 20   # Optional value. If missing all the screen width is used to calculate column width
+            col_padding: 2
+        }
+        style: {
+            text: green
+            selected_text: green_reverse
+            description_text: yellow
+        }
+      }
+      {
+        name: history_menu
+        only_buffer_difference: true
+        marker: "? "
+        type: {
+            layout: list
+            page_size: 10
+        }
+        style: {
+            text: green
+            selected_text: green_reverse
+            description_text: yellow
+        }
+      }
+      {
+        name: help_menu
+        only_buffer_difference: true
+        marker: "? "
+        type: {
+            layout: description
+            columns: 4
+            col_width: 20   # Optional value. If missing all the screen width is used to calculate column width
+            col_padding: 2
+            selection_rows: 4
+            description_rows: 10
+        }
+        style: {
+            text: green
+            selected_text: green_reverse
+            description_text: yellow
+        }
+      }
+      # Example of extra menus created using a nushell source
+      # Use the source field to create a list of records that populates
+      # the menu
+      {
+        name: commands_menu
+        only_buffer_difference: false
+        marker: "# "
+        type: {
+            layout: columnar
+            columns: 4
+            col_width: 20
+            col_padding: 2
+        }
+        style: {
+            text: green
+            selected_text: green_reverse
+            description_text: yellow
+        }
+        source: { |buffer, position|
+            $nu.scope.commands
+            | where command =~ $buffer
+            | each { |it| {value: $it.command description: $it.usage} }
+        }
+      }
+      {
+        name: vars_menu
+        only_buffer_difference: true
+        marker: "# "
+        type: {
+            layout: list
+            page_size: 10
+        }
+        style: {
+            text: green
+            selected_text: green_reverse
+            description_text: yellow
+        }
+        source: { |buffer, position|
+            $nu.scope.vars
+            | where name =~ $buffer
+            | sort-by name
+            | each { |it| {value: $it.name description: $it.type} }
+        }
+      }
+      {
+        name: commands_with_description
+        only_buffer_difference: true
+        marker: "# "
+        type: {
+            layout: description
+            columns: 4
+            col_width: 20
+            col_padding: 2
+            selection_rows: 4
+            description_rows: 10
+        }
+        style: {
+            text: green
+            selected_text: green_reverse
+            description_text: yellow
+        }
+        source: { |buffer, position|
+            $nu.scope.commands
+            | where command =~ $buffer
+            | each { |it| {value: $it.command description: $it.usage} }
+        }
+      }
+  ]
   keybindings: [
     {
       name: completion_menu
@@ -256,29 +362,27 @@ let $config = {
         ]
       }
     }
+    # Keybindings used to trigger the user defined menus
+    {
+      name: commands_menu
+      modifier: control
+      keycode: char_t
+      mode: [emacs, vi_normal, vi_insert]
+      event: { send: menu name: commands_menu }
+    }
+    {
+      name: vars_menu
+      modifier: control
+      keycode: char_y
+      mode: [emacs, vi_normal, vi_insert]
+      event: { send: menu name: vars_menu }
+    }
+    {
+      name: commands_with_description
+      modifier: control
+      keycode: char_u
+      mode: [emacs, vi_normal, vi_insert]
+      event: { send: menu name: commands_with_description }
+    }
   ]
 }
-
-# Setup PATH permanently
-let-env PATH = ($env.PATH | append ["/usr/local/bin", "/Users/mathspy/.cargo/bin", "/Users/mathspy/.volta/bin"])
-
-# Setup starship prompt
-let-env STARSHIP_SHELL = "nu"
-
-def create_left_prompt [] {
-    $"(starship prompt --cmd-duration $env.CMD_DURATION_MS $'--status=($env.LAST_EXIT_CODE)' | str trim) "
-}
-def create_right_prompt [] {
-    starship prompt --right --cmd-duration $env.CMD_DURATION_MS $'--status=($env.LAST_EXIT_CODE)'
-}
-
-# Use nushell functions to define your right and left prompt
-let-env PROMPT_COMMAND = { create_left_prompt }
-let-env PROMPT_COMMAND_RIGHT = { create_right_prompt }
-
-# The prompt indicators are environmental variables that represent
-# the state of the prompt
-let-env PROMPT_INDICATOR = ""
-let-env PROMPT_INDICATOR_VI_INSERT = ": "
-let-env PROMPT_INDICATOR_VI_NORMAL = "〉"
-let-env PROMPT_MULTILINE_INDICATOR = "::: "
