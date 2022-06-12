@@ -2,6 +2,18 @@ def "nu-complete git branches" [] {
   ^git branch | lines | each { |line| $line | str replace '\* ' "" | str trim }
 }
 
+def "nu-complete git r-branches" [current_line: string] {
+  # I really don't understand where this weird " a" comes from
+  let $remote = ($current_line | str replace "git fetch " "" | str replace " a" "");
+
+  ^git branch -r
+    | lines
+    | each { |line| $line | str replace '\* ' "" | str replace '.*->' "" | str trim }
+    | where ($it | str starts-with $remote)
+    | each { |line| $line | str replace $"($remote)/" "" }
+    | uniq
+}
+
 def "nu-complete git remotes" [] {
   ^git remote | lines | each { |line| $line | str trim }
 }
@@ -39,6 +51,7 @@ export extern "git checkout" [
 # Download objects and refs from another repository
 export extern "git fetch" [
   repository?: string@"nu-complete git remotes" # name of the branch to fetch
+  branch?: string@"nu-complete git r-branches"  # name of the remote branch to fetch
   --all                                         # Fetch all remotes
   --append(-a)                                  # Append ref names and object names to .git/FETCH_HEAD
   --atomic                                      # Use an atomic transaction to update local refs.
