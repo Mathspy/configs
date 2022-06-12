@@ -1,6 +1,6 @@
 # Nushell Config File
 
-use "~/Library/Application Support/nushell/completions/git.nu" *
+use completions/git.nu *
 
 # for more information on themes see
 # https://www.nushell.sh/book/coloring_and_theming.html
