@@ -252,7 +252,7 @@ let-env config = {
     {
       name: vars_menu
       modifier: control
-      keycode: char_y
+      keycode: char_v
       mode: [emacs, vi_normal, vi_insert]
       event: { send: menu name: vars_menu }
     }
