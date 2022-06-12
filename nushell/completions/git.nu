@@ -148,3 +148,8 @@ export extern "git switch" [
   --recurse-submodules                            # update the contents of sub-modules
   --track(-t)                                     # set "upstream" configuration
 ]
+
+export extern "git merge" [
+  branch?: string@"nu-complete git branches"      # name of branch to merge
+  --squash
+]
