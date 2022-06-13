@@ -22,6 +22,7 @@ def "nu-complete git log" [] {
   ^git log --pretty=%h | lines | each { |line| $line | str trim }
 }
 
+################## AUTO COMPLETIONS ##################
 # Check out git branches and files
 export extern "git checkout" [
   ...targets: string@"nu-complete git branches"   # name of the branch or files to checkout
@@ -153,3 +154,18 @@ export extern "git merge" [
   branch?: string@"nu-complete git branches"      # name of branch to merge
   --squash
 ]
+
+################## CUSTOM COMMANDS ##################
+export def "git age" [] {
+  git branch
+    | lines
+    | str substring 2,
+    | wrap name
+    | insert date {
+      each { |$it|
+        git show $it.name --no-patch --format=%as --
+          | into datetime
+        }
+      }
+    | sort-by date
+}
