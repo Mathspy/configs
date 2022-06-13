@@ -169,3 +169,10 @@ export def "git age" [] {
       }
     | sort-by date
 }
+
+export def "git who" [ref: string] {
+  {
+    author: (^git show -s --format="%an <%ae>" $ref | str substring 1,-2)
+    committer: (^git show -s --format="%cn <%ce>" $ref | str substring 1,-2)
+  }
+}
