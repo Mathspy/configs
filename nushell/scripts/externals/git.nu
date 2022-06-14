@@ -165,7 +165,7 @@ export extern "git branch" [
 
 ################## CUSTOM COMMANDS ##################
 export def "git age" [] {
-  git branch
+  ^git branch
     | lines
     | str substring 2,
     | wrap name
