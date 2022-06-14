@@ -155,6 +155,14 @@ export extern "git merge" [
   --squash
 ]
 
+# Move or delete or make changes related to branches
+export extern "git branch" [
+  branch?: string@"nu-complete git branches"      # name of branch to switch to
+  --delete(-d)                                    # delete a branch if deleting won't causing floating commits
+  -D                                              # forces deletes a branch
+  --help                                          # show help instructions for command
+]
+
 ################## CUSTOM COMMANDS ##################
 export def "git age" [] {
   git branch
