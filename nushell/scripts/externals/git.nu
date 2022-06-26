@@ -158,6 +158,7 @@ export extern "git merge" [
 # Move or delete or make changes related to branches
 export extern "git branch" [
   branch?: string@"nu-complete git branches"      # name of branch to switch to
+  --move(-m)                                      # rename the branch
   --delete(-d)                                    # delete a branch if deleting won't causing floating commits
   -D                                              # forces deletes a branch
   --help                                          # show help instructions for command
