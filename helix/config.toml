@@ -2,6 +2,10 @@ theme = "rose_pine"
 
 [keys.normal]
 "ß" = "split_selection_on_newline"
+"…" = "flip_selections"
 
 [keys.insert]
 "j" = {"k" = "normal_mode"}
+
+[keys.select]
+"…" = "flip_selections"
