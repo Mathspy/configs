@@ -1,5 +1,8 @@
 theme = "rose_pine"
 
+[editor]
+color-modes = true
+
 [keys.normal]
 "ß" = "split_selection_on_newline"
 "…" = "flip_selections"
