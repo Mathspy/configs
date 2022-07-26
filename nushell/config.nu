@@ -1,6 +1,7 @@
 # Nushell Config File
 
 use externals/git.nu *
+use fun.nu *
 
 # for more information on themes see
 # https://www.nushell.sh/book/coloring_and_theming.html
