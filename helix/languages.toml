@@ -2,3 +2,15 @@
 name = "git-commit"
 rulers = [50, 72]
 max-line-length = 72
+
+[[language]]
+name = "javascript"
+formatter = { command = "rome" , args = ["format", "--stdin-file-path", "example.js"] }
+
+[[language]]
+name = "typescript"
+formatter = { command = "rome" , args = ["format", "--stdin-file-path", "example.ts"] }
+
+[[language]]
+name = "tsx"
+formatter = { command = "rome" , args = ["format", "--stdin-file-path", "example.tsx"] }
