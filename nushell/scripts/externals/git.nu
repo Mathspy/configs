@@ -185,3 +185,7 @@ export def "git who" [ref: string] {
     committer: (^git show -s --format="%cn <%ce>" $ref | str substring 1,-2)
   }
 }
+
+export def "git cd" [ref: string] {
+  ^git diff $"($ref)~" $ref
+}
