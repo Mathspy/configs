@@ -3,6 +3,17 @@ theme = "rose_pine"
 [editor]
 color-modes = true
 
+[editor.statusline]
+center = ["file-type"]
+right = [
+  "diagnostics",
+  "selections",
+  "separator",
+  "position",
+  "position-percentage",
+  "file-encoding",
+]
+
 [keys.normal]
 "ß" = "split_selection_on_newline"
 "…" = "flip_selections"
