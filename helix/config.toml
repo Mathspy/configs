@@ -15,6 +15,8 @@ right = [
 ]
 
 [keys.normal]
+"r" = "replace_with_yanked"
+"R" = "replace"
 "ß" = "split_selection_on_newline"
 "…" = "flip_selections"
 
