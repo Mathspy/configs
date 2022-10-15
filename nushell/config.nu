@@ -1,6 +1,7 @@
 # Nushell Config File
 
 use externals/git.nu *
+use externals/doctl.nu *
 use fun.nu *
 
 # for more information on themes see
