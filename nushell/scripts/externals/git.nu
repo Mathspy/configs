@@ -189,3 +189,7 @@ export def "git who" [ref: string] {
 export def "git cd" [ref: string] {
   ^git diff $"($ref)~" $ref
 }
+
+export def "git file" [ref: string, path: string] {
+  ^git show $"($ref):($path)"
+}
