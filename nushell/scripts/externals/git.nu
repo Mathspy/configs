@@ -186,8 +186,12 @@ export def "git who" [ref: string] {
   }
 }
 
-export def "git cd" [ref: string] {
-  ^git diff $"($ref)~" $ref
+export def "git cd" [ref: string, --line-numbers: bool] {
+  if $line-numbers {
+    ^git -c delta.line-numbers=true diff $"($ref)~" $ref
+  } else {
+    ^git diff $"($ref)~" $ref
+  }
 }
 
 export def "git file" [ref: string, path: string] {
