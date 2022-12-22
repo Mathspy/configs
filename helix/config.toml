@@ -21,6 +21,8 @@ right = [
 "R" = "replace"
 "ß" = "split_selection_on_newline"
 "…" = "flip_selections"
+"d" = "delete_selection_noyank"
+"c" = "change_selection_noyank"
 
 [keys.insert]
 "j" = {"k" = "normal_mode"}
