@@ -23,6 +23,8 @@ right = [
 "…" = "flip_selections"
 "d" = "delete_selection_noyank"
 "c" = "change_selection_noyank"
+"p" = "paste_before"
+"P" = "paste_after"
 
 [keys.insert]
 "j" = {"k" = "normal_mode"}
