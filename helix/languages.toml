@@ -6,11 +6,14 @@ max-line-length = 72
 [[language]]
 name = "javascript"
 formatter = { command = "rome" , args = ["format", "--stdin-file-path", "example.js"] }
+auto-format = true
 
 [[language]]
 name = "typescript"
 formatter = { command = "rome" , args = ["format", "--stdin-file-path", "example.ts"] }
+auto-format = true
 
 [[language]]
 name = "tsx"
 formatter = { command = "rome" , args = ["format", "--stdin-file-path", "example.tsx"] }
+auto-format = true
