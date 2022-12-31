@@ -77,8 +77,10 @@ let-env config = {
   max_history_size: 10000 # Session has to be reloaded for this to take effect
   sync_history_on_enter: true # Enable to share the history between multiple sessions, else you have to close the session to persist history to file
   shell_integration: true # enables terminal markers and a workaround to arrow keys stop working issue
-  disable_table_indexes: false # set to true to remove the index column from tables
   cd_with_abbreviations: false # set to true to allow you to do things like cd s/o/f and nushell expand it to cd some/other/folder
+  table: {
+    index_mode: "always" # "always" show indexes, "never" show indexes, "auto" = show indexes when a table has "index" column
+  }
   menus: [
       # Configuration for default nushell menus
       # Note the lack of souce parameter

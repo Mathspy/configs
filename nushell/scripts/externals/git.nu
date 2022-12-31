@@ -187,7 +187,7 @@ export def "git who" [ref: string] {
 }
 
 export def "git cd" [ref: string, --line-numbers: bool] {
-  if $line-numbers {
+  if $line_numbers {
     ^git -c delta.line-numbers=true diff $"($ref)~" $ref
   } else {
     ^git diff $"($ref)~" $ref
