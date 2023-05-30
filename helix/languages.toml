@@ -1,7 +1,7 @@
 [[language]]
 name = "git-commit"
 rulers = [50, 72]
-max-line-length = 72
+text-width = 72
 
 [[language]]
 name = "javascript"
