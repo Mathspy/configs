@@ -30,4 +30,6 @@ right = [
 "j" = {"k" = "normal_mode"}
 
 [keys.select]
+"r" = "replace_with_yanked"
+"R" = "replace"
 "…" = "flip_selections"
