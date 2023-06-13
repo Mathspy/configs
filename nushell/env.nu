@@ -56,7 +56,7 @@ let-env NU_PLUGIN_DIRS = [
 
 # To add entries to PATH (on Windows you might use Path), you can use the following pattern:
 # let-env PATH = ($env.PATH | prepend '/some/path')
-let-env PATH = ($env.PATH | append ["/usr/local/bin", "/Users/mathspy/.cargo/bin", "/opt/homebrew/bin", "/Users/mathspy/.volta/bin"])
+let-env PATH = ($env.PATH | append ["/usr/local/bin", "/Users/mathspy/.cargo/bin", "/opt/homebrew/bin", "/Users/mathspy/.volta/bin", "/Users/mathspy/Library/Python/3.9/bin/"])
 
 # Setup starship prompt
 let-env STARSHIP_SHELL = "nu"
