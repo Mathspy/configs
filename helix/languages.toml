@@ -17,3 +17,9 @@ auto-format = true
 name = "tsx"
 formatter = { command = "rome" , args = ["format", "--stdin-file-path", "example.tsx"] }
 auto-format = true
+
+[[language]]
+name = "rust"
+
+[language.config.checkOnSave]
+command = "clippy"
