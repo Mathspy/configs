@@ -9,5 +9,5 @@ export def "str squarepants" [] {
           $it.item | str upcase
         }
       }
-    | str collect
+    | str join
 }
