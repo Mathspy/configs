@@ -1,3 +1,6 @@
+[language-server.rust-analyzer.config]
+check.command = "clippy"
+
 [[language]]
 name = "git-commit"
 rulers = [50, 72]
@@ -17,12 +20,6 @@ auto-format = true
 name = "tsx"
 formatter = { command = "rome" , args = ["format", "--stdin-file-path", "example.tsx"] }
 auto-format = true
-
-[[language]]
-name = "rust"
-
-[language.config.checkOnSave]
-command = "clippy"
 
 [[language]]
 name = "markdown"
