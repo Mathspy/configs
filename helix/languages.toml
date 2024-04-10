@@ -25,3 +25,7 @@ auto-format = true
 name = "markdown"
 formatter = { command = "deno", args = ["fmt", "--ext", "md", "-"] }
 auto-format = true
+
+[[language]]
+name = "wgsl"
+auto-format = true
