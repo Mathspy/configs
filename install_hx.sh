@@ -48,7 +48,11 @@ echo -e "Detected latest helix release: ${CYAN}$release${ENDCOLOR}"
 foldername="helix-$release-$arch-$os"
 filename="$foldername.tar.xz"
 echo "Downloading latest helix release: $filename"
- 
+
+tmpdir=$(mktemp -d 2>/dev/null || mktemp -d -t "helix-install")
+prev_pwd=$(pwd)
+
+cd "$tmpdir"
 curl "https://github.com/helix-editor/helix/releases/latest/download/$filename" \
   --remote-name \
   --location
@@ -74,8 +78,7 @@ mv runtime ~/.config/helix/runtime
 echo "Installed runtime"
 
 echo "Cleaning up..."
-cd ..
-rm -rf "$foldername"
-rm "$filename"
+cd "$prev_pwd"
+rm -rf "$tmpdir"
 
 echo -e "Done! Type \`${PURPLE}hx${ENDCOLOR}\` to start hacking away!"
