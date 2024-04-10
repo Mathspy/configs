@@ -3,6 +3,7 @@
 use externals/git.nu *
 use externals/doctl.nu *
 use fun.nu *
+use jwt.nu *
 
 # for more information on themes see
 # https://www.nushell.sh/book/coloring_and_theming.html
