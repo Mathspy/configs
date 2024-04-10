@@ -16,6 +16,9 @@ right = [
   "file-encoding",
 ]
 
+[editor.lsp]
+display-inlay-hints = true
+
 [keys.normal]
 "r" = "replace_with_yanked"
 "R" = "replace"
