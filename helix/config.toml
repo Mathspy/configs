@@ -20,19 +20,31 @@ right = [
 display-inlay-hints = true
 
 [keys.normal]
+# Swap replace to from yanked by default
 "r" = "replace_with_yanked"
 "R" = "replace"
+
+# MacOS alt == option
 "ß" = "split_selection_on_newline"
 "…" = "flip_selections"
+
+# Don't copy on deletion and change
 "d" = "delete_selection_noyank"
 "c" = "change_selection_noyank"
+
+# Swap paste to paste by default before to match my brain
 "p" = "paste_before"
 "P" = "paste_after"
+
 
 [keys.insert]
 "j" = {"k" = "normal_mode"}
 
+
 [keys.select]
+# Swap replace to from yanked by default
 "r" = "replace_with_yanked"
 "R" = "replace"
+
+# MacOS alt == option
 "…" = "flip_selections"
