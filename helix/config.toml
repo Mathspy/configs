@@ -27,6 +27,10 @@ display-inlay-hints = true
 # MacOS alt == option
 "ß" = "split_selection_on_newline"
 "…" = "flip_selections"
+"˜" = "select_next_sibling"
+"π" = "select_prev_sibling"
+"ˆ" = "shrink_selection"
+"ø" = "expand_selection"
 
 # Don't copy on deletion and change
 "d" = "delete_selection_noyank"
