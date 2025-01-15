@@ -29,3 +29,7 @@ auto-format = true
 [[language]]
 name = "wgsl"
 auto-format = true
+
+[[language]]
+name = "rust"
+text-width = 100
