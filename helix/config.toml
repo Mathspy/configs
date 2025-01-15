@@ -3,6 +3,7 @@ theme = "rose_pine"
 [editor]
 color-modes = true
 bufferline = "multiple"
+end-of-line-diagnostics = "hint"
 
 [editor.statusline]
 center = ["file-type"]
@@ -18,6 +19,9 @@ right = [
 
 [editor.lsp]
 display-inlay-hints = true
+
+[editor.inline-diagnostics]
+cursor-line = "error"
 
 [keys.normal]
 # Swap replace to from yanked by default
